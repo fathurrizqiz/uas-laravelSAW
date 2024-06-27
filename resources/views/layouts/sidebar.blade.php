@@ -98,7 +98,7 @@
                         
                     } else {
                         $("#home").show();
-                        $("#penilaian").show();
+                        $("#proses").show();
                     }
                 });
             </script>

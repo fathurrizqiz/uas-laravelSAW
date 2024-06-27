@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -35,13 +37,21 @@ class RegisterController extends Controller
         ]);
         $hashedPassword = Hash::make($request->password);
 
-        DB::table('users')-> insert( [
+        $user = User::create([
             'name' => $request -> name,
             'email' => $request -> email,
             'password' => $hashedPassword
 
         ]);
-        return redirect('login') -> with ('autentikasi email');
+        Auth::login($user);
+
+        event(new Registered($user));
+        
+        // return redirect('login') -> with ('autentikasi email');
+        // return redirect('auth.verify-email');
+       
+
+        return redirect('email/verify');
 
        
 
